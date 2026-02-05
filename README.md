@@ -164,6 +164,27 @@ Content-Type: application/json
 ```
 
 
+## 📱 Android 클라이언트 (CBot)
+
+`android_client/` 디렉토리에는 NestJS 서버와 연동되는 전용 안드로이드 앱 소스코드가 포함되어 있습니다.
+
+### 주요 특징
+- **Terminal UI**: 해커 감성의 블랙 & 그린 테마 터미널 인터페이스
+- **Clean Architecture**: Domain, Data, Presentation 레이어 분리로 유지보수 용이
+- **실시간 알림 처리**: 카카오톡 알림을 가로채 AI 서버로 중계 (MyNotificationService)
+- **네트워크 안정성**: 타임아웃 60초 설정으로 안정적인 AI 응답 대기
+
+### 실행 방법
+1. **Android Studio**에서 `android_client` 폴더를 프로젝트로 엽니다.
+2. `RetrofitClient.kt` 파일에서 `BASE_URL`을 PC의 LAN IP 주소로 수정합니다.
+   ```kotlin
+   private const val BASE_URL = "http://192.168.x.x:3001/"
+   ```
+3. 실제 기기 또는 에뮬레이터에서 앱을 실행합니다.
+4. **알림 접근 권한**을 허용하면 "코비서" 호출어가 포함된 메시지에 대해 자동으로 AI 답변이 생성됩니다.
+
+---
+
 ## ⚙️ 설정 옵션
 
 ### 환경 변수
