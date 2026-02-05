@@ -118,15 +118,6 @@ Content-Type: application/json
 }
 ```
 
-#### 4.1.3 채팅 기록 조회
-```
-GET /chat/history/:roomId
-```
-- **설명**: 채팅 기록 반환 (현재는 미니멀 버전)
-- **응답**:
-```json
-[]
-```
 
 ## ⚙️ 설정 요구사항
 

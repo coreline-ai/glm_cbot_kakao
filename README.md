@@ -163,18 +163,6 @@ Content-Type: application/json
 }
 ```
 
-### 3. 채팅 기록 조회
-
-```http
-GET /chat/history/:roomId
-```
-
-**응답:**
-```json
-[]
-```
-
-> **참고**: 현재 버전에서는 채팅 기록 저장 기능이 구현되어 있지 않습니다.
 
 ## ⚙️ 설정 옵션
 

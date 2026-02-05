@@ -101,11 +101,6 @@ class AppController {
     return result || { summary: null };
   }
 
-  // 히스토리 조회 (Minimal 버전)
-  @Get('chat/history')
-  getHistory() {
-    return [];
-  }
 }
 
 /**

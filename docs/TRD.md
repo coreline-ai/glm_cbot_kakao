@@ -141,9 +141,6 @@ class AppController {
   @Post('chat/process')
   async process(@Body() body: { message: string }): Promise<{ summary: string } | null>
 
-  // 채팅 기록 조회
-  @Get('chat/history/:roomId')
-  getHistory(): any[]
 }
 ```
 
@@ -211,16 +208,6 @@ Content-Type: application/json
 }
 ```
 
-#### 4.1.3 채팅 기록 조회
-
-```
-GET /chat/history/:roomId
-```
-
-**응답**:
-```json
-[]
-```
 
 ## ⚙️ 환경 변수 설정
 
