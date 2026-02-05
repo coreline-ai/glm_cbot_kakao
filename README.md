@@ -1,6 +1,11 @@
 # KakaoTalk AI Agent (GLM Powered)
 
 <p align="center">
+  <img src="https://github.com/user-attachments/assets/3c7b6f9d-afcc-437a-8bf6-0705151b2ea4" width="23%" alt="KakaoTalk Photo 1" />
+  <img src="https://github.com/user-attachments/assets/87186bd1-435d-4664-b7b1-918c294cd613" width="30%" alt="KakaoTalk Photo 2" />
+</p>
+
+<p align="center">
   <a href="https://nestjs.com/" target="_blank" rel="noreferrer">
     <img src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white" alt="NestJS" />
   </a>
