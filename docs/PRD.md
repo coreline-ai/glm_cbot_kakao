@@ -235,3 +235,15 @@ Content-Type: application/json
 - **기능**: 고급 분석 기능
 - **기능**: 알림 시스템
 - **기능**: 모바일 앱 연동
+
+### 11.4 Android 클라이언트 개발
+- **앱 아키텍처**: Clean Architecture (Domain, Data, Presentation 레이어)
+- **UI 디자인**: Terminal UI (해커 감성의 블랙 & 그린 테마)
+- **핵심 기능**: 실시간 알림 처리, 네트워크 안정성, 자동 응답 생성
+- **기술 스택**: Kotlin, Retrofit, Coroutines
+- **주요 컴포넌트**: MyNotificationService, RetrofitClient, UI 레이어
+
+### 11.5 버전 1.3.0 (계획)
+- **기능**: 실시간 알림 처리
+- **기능**: 다중 장치 지원
+- **기능**: 고급 사용자 인터페이스

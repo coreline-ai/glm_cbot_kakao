@@ -491,3 +491,88 @@ ssh user@server "cd /path/to/app && npm install --production && pm2 start main.j
 - **로그 모니터링**: 서버 로그 실시간 확인
 - **성능 모니터링**: CPU, 메모리 사용량 모니터링
 - **알림 시스템**: 이상 감지 시 알림 (미구현)
+
+### 14.4 Android 클라이언트 개발
+
+#### 14.4.1 앱 아키텍처
+- **Clean Architecture**: Domain, Data, Presentation 레이어 분리
+- **모듈화 설계**: 기능별 모듈 분리 가능
+- **의존성 주입**: Kotlin DI를 통한 유연한 의존성 관리
+
+#### 14.4.2 기술 스택
+| 구성 요소 | 기술 | 버전 | 설명 |
+|----------|------|------|------|
+| **프로그래밍 언어** | Kotlin | 1.9+ | 현대적인 JVM 언어 |
+| **HTTP 클라이언트** | Retrofit | 2.9+ | 타입-safe HTTP 클라이언트 |
+| **비동기 프로그래밍** | Coroutines | 1.7+ | 비동기 작업 처리 |
+| **의존성 주입** | Koin | 3.4+ | 경량 DI 프레임워크 |
+| **UI 프레임워크** | Jetpack Compose | 1.5+ | 현대적인 UI 툴킷 |
+| **알림 처리** | NotificationListenerService | - | 시스템 알림 가로채기 |
+
+#### 14.4.3 주요 컴포넌트
+
+```kotlin
+// MyNotificationService - 알림 처리 서비스
+class MyNotificationService : NotificationListenerService() {
+    override fun onNotificationPosted(sbn: StatusBarNotification) {
+        // 알림 메시지 처리 로직
+    }
+}
+
+// RetrofitClient - API 클라이언트
+interface ApiService {
+    @POST("chat/process")
+    suspend fun processMessage(@Body request: ChatRequest): ChatResponse
+}
+
+// UI 레이어 - Terminal UI 구현
+@Composable
+fun TerminalScreen() {
+    // 해커 감성의 블랙 & 그린 테마 UI
+}
+```
+
+#### 14.4.4 개발 가이드
+
+**프로젝트 설정**:
+```bash
+# Android Studio에서 android_client 폴더를 프로젝트로 열기
+# RetrofitClient.kt 파일에서 BASE_URL 수정
+private const val BASE_URL = "http://192.168.x.x:3001/"
+```
+
+**알림 접근 권한**:
+```xml
+<!-- AndroidManifest.xml -->
+<service
+    android:name=".MyNotificationService"
+    android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+    <intent-filter>
+        <action android:name="android.service.notification.NotificationListenerService" />
+    </intent-filter>
+</service>
+```
+
+**네트워크 설정**:
+```kotlin
+// 네트워크 타임아웃 설정 (60초)
+val timeout = 60L
+val client = OkHttpClient.Builder()
+    .connectTimeout(timeout, TimeUnit.SECONDS)
+    .readTimeout(timeout, TimeUnit.SECONDS)
+    .writeTimeout(timeout, TimeUnit.SECONDS)
+    .build()
+```
+
+#### 14.4.5 테스트 전략
+
+- **단위 테스트**: ViewModel, UseCase 테스트
+- **통합 테스트**: 네트워크 통신 테스트
+- **UI 테스트**: Compose UI 테스트
+- **알림 테스트**: 알림 처리 흐름 테스트
+
+### 14.5 버전 1.3.0 (계획)
+
+- **기능**: 실시간 알림 처리
+- **기능**: 다중 장치 지원
+- **기능**: 고급 사용자 인터페이스
