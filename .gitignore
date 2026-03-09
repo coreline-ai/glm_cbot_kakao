@@ -51,6 +51,24 @@ lerna-debug.log*
 .env.test.local
 .env.production.local
 .env.local
+*.env.local
+*.local.env
+**/.env.local
+**/secrets.properties
+**/local.properties
+android_client/secrets.properties
+android_client/local.properties
+android_client/*.jks
+android_client/*.keystore
+android_client/app/.cxx/
+android_client/.cxx/
+**/.cxx/
+**/.externalNativeBuild/
+codex_proxy/.env.local
+codex_proxy/.proxy-auth.json
+codex_proxy/.codex/
+stock_proxy/.env.local
+stock_proxy/.proxy-cache/
 
 # temp directory
 .temp

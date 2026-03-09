@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">CBot</string>
+    <string name="notification_permission_title">알림 접근 권한 필요</string>
+    <string name="notification_permission_message">카카오톡 메시지를 읽고 자동 응답을 보내려면 알림 접근 권한이 필요합니다. 설정 화면으로 이동하시겠습니까?</string>
+    <string name="notification_permission_action">이동</string>
+    <string name="notification_permission_later">나중에</string>
+    <string name="settings_applied">설정을 적용했습니다.</string>
 </resources>

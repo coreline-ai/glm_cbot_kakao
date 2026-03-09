@@ -1,11 +1,60 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
 }
+
+def secretsProperties = new Properties()
+def secretsFile = rootProject.file("secrets.properties")
+if (secretsFile.exists()) {
+    secretsFile.withInputStream { secretsProperties.load(it) }
+}
+
+def resolveSecret = { String key, String defaultValue = "" ->
+    def envValue = System.getenv(key)
+    if (envValue != null && !envValue.trim().isEmpty()) {
+        return envValue.trim()
+    }
+
+    def fileValue = secretsProperties.getProperty(key)
+    if (fileValue != null && !fileValue.trim().isEmpty()) {
+        return fileValue.trim()
+    }
+
+    return defaultValue
+}
+
+def splitSecret = { String secret ->
+    if (secret == null || secret.isEmpty()) {
+        return ["", "", ""]
+    }
+
+    int partSize = Math.ceil(secret.length() / 3.0d) as int
+    String partA = secret.substring(0, Math.min(partSize, secret.length()))
+    String partB = secret.substring(Math.min(partSize, secret.length()), Math.min(partSize * 2, secret.length()))
+    String partC = secret.substring(Math.min(partSize * 2, secret.length()))
+    return [partA, partB, partC]
+}
+
+def cmakeString = { String value ->
+    return "\"${value.replace("\\", "\\\\").replace("\"", "\\\"")}\""
+}
+
+def embeddedGlmApiKey = resolveSecret("CBOT_GLM_API_KEY")
+def embeddedGlmKeyParts = splitSecret(embeddedGlmApiKey)
+def embeddedOpenAiApiKey = resolveSecret("CBOT_OPENAI_API_KEY")
+def embeddedOpenAiKeyParts = splitSecret(embeddedOpenAiApiKey)
+def allowedCertSha256 = resolveSecret("CBOT_ALLOWED_CERT_SHA256").toUpperCase()
 
 android {
     namespace = "com.coreline.cbot"
     compileSdk = 34
+
+    signingConfigs {
+        releaseTest {
+            initWith signingConfigs.debug
+        }
+    }
 
     defaultConfig {
         applicationId = "com.coreline.cbot"
@@ -15,28 +64,73 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "GLM_BASE_URL", "\"https://api.z.ai/api/paas/v4/\""
+        buildConfigField "String", "GLM_MODEL", "\"glm-4.5-flash\""
+        buildConfigField "String", "GLM_PROVIDER_NAME", "\"Z.AI GLM\""
+        buildConfigField "String", "OPENAI_BASE_URL", "\"https://api.openai.com/v1/\""
+        buildConfigField "String", "OPENAI_MODEL", "\"gpt-5.4\""
+        buildConfigField "String", "OPENAI_PROVIDER_NAME", "\"OpenAI\""
+        buildConfigField "String", "CODEX_PROXY_BASE_URL", "\"http://127.0.0.1:4317/\""
+        buildConfigField "String", "CODEX_PROXY_MODEL", "\"gpt-5\""
+        buildConfigField "String", "CODEX_PROXY_PROVIDER_NAME", "\"Codex Proxy\""
+        buildConfigField "String", "STOCK_PROXY_BASE_URL", "\"http://127.0.0.1:4327/\""
+        buildConfigField "String", "STOCK_PROXY_MODEL", "\"stock-summary-v1\""
+        buildConfigField "String", "STOCK_PROXY_PROVIDER_NAME", "\"Stock Proxy\""
+        buildConfigField "String", "ALLOWED_CERT_SHA256", "\"${allowedCertSha256}\""
+        buildConfigField "boolean", "GLM_EMBEDDED_SECRET_AVAILABLE", "${!embeddedGlmApiKey.isEmpty()}"
+        buildConfigField "boolean", "OPENAI_EMBEDDED_SECRET_AVAILABLE", "${!embeddedOpenAiApiKey.isEmpty()}"
+
+        externalNativeBuild {
+            cmake {
+                arguments "-DGLM_KEY_PART_A=${cmakeString(embeddedGlmKeyParts[0])}",
+                    "-DGLM_KEY_PART_B=${cmakeString(embeddedGlmKeyParts[1])}",
+                    "-DGLM_KEY_PART_C=${cmakeString(embeddedGlmKeyParts[2])}",
+                    "-DOPENAI_KEY_PART_A=${cmakeString(embeddedOpenAiKeyParts[0])}",
+                    "-DOPENAI_KEY_PART_B=${cmakeString(embeddedOpenAiKeyParts[1])}",
+                    "-DOPENAI_KEY_PART_C=${cmakeString(embeddedOpenAiKeyParts[2])}"
+            }
+        }
     }
 
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
+            buildConfigField "boolean", "BLOCK_AUTOREPLY", "true"
+        }
+
+        release {
+            signingConfig signingConfigs.releaseTest
+            minifyEnabled false
+            shrinkResources false
+            buildConfigField "boolean", "BLOCK_AUTOREPLY", "false"
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+
+    buildFeatures {
+        buildConfig true
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+
+    externalNativeBuild {
+        cmake {
+            path file("src/main/cpp/CMakeLists.txt")
+            version "3.22.1"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
 dependencies {
     implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
 
@@ -47,9 +141,12 @@ dependencies {
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
-    
+
     // Lifecycle
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- UI Redesign Palette -->
+    <color name="bg_dark">#0A0A0A</color>
+    <color name="bg_terminal">#121212</color>
+    <color name="terminal_stroke">#333333</color>
+    <color name="terminal_tab_inactive">#888888</color>
+    
+    <color name="accent_green">#00C853</color>
+    <color name="accent_green_faded">#1B5E20</color>
+    <color name="accent_red">#FF5252</color>
+    <color name="accent_red_faded">#B71C1C</color>
+    <color name="accent_yellow">#FFD600</color>
+    <color name="accent_blue">#448AFF</color>
+    
+    <color name="text_main">#E0E0E0</color>
+    <color name="text_dim">#666666</color>
+</resources>
