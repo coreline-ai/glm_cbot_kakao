@@ -1,4 +1,4 @@
-# 카카오 챗봇
+# 카카오 챗봇 (V2 Android 자체 버전 + Proxy 확장)
 
 <p align="center">
   <img src="https://img.shields.io/badge/Android-자동응답-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android 자동응답" />
@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <em>카카오톡 알림 자동응답, 직접 LLM 호출, Codex OAuth 프록시, 국내 주식 자연어 요약까지 하나로 묶은 안드로이드 중심 프로젝트</em>
+  <em>Android Standalone without Server, 카카오톡 알림 자동응답, 직접 LLM 호출, Codex OAuth 프록시, 국내 주식 자연어 요약까지 하나로 묶은 안드로이드 중심 프로젝트</em>
 </p>
 
 ---
